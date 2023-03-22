@@ -25,7 +25,12 @@ class ArticlesApiList(generics.ListCreateAPIView):
     pagination_class = ArticlesAPIPagination
 
 
-
+class ShowCategoryApiList(generics.ListCreateAPIView):
+    def get_queryset(self):
+        return Articles.objects.filter(categ__slug=self.kwargs['cat_slug'],).select_related('categ')
+    serializer_class = ArticlesSerializer
+    # permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = ArticlesAPIPagination
 
 
 class CategoryArticlesApiList(generics.ListCreateAPIView):
