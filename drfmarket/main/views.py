@@ -35,7 +35,7 @@ class ShowCategoryApiList(generics.ListCreateAPIView):
 
 class CategoryArticlesApiList(generics.ListCreateAPIView):
     queryset = Category_Articles.objects.all()
-    serializer_class = ArticlesSerializer
+    serializer_class = CategoryArticlesSerializer
     # permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
