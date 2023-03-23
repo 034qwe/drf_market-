@@ -8,5 +8,6 @@ urlpatterns = [
     path('api/v1/articles/<int:pk>/',ArticlesAPIUpdate.as_view()),
     path('api/v1/articlesdelete/<int:pk>/', ArticlesAPIDestroy.as_view()),
     path('category/<slug:cat_slug>/',ShowCategoryApiList.as_view() ,name='category'),
-    path('api/v1/all_category/',CategoryArticlesApiList.as_view())
+    path('api/v1/all_category/',CategoryArticlesApiList.as_view()),
+    path('api/v1/auth/', include('rest_framework.urls')),
 ]
