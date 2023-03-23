@@ -21,7 +21,7 @@ class ArticlesAPIPagination(PageNumberPagination):
 class ArticlesApiList(generics.ListCreateAPIView):
     queryset = Articles.objects.all()
     serializer_class = ArticlesSerializer
-    # permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = ArticlesAPIPagination
 
 
@@ -29,14 +29,14 @@ class ShowCategoryApiList(generics.ListCreateAPIView):
     def get_queryset(self):
         return Articles.objects.filter(categ__slug=self.kwargs['cat_slug'],).select_related('categ')
     serializer_class = ArticlesSerializer
-    # permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = ArticlesAPIPagination
 
 
 class CategoryArticlesApiList(generics.ListCreateAPIView):
     queryset = Category_Articles.objects.all()
     serializer_class = CategoryArticlesSerializer
-    # permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 
@@ -44,13 +44,13 @@ class CategoryArticlesApiList(generics.ListCreateAPIView):
 class ArticlesAPIUpdate(generics.UpdateAPIView):
     queryset = Articles.objects.all()
     serializer_class = ArticlesSerializer
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
 
 class ArticlesAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Articles.objects.all() 
     serializer_class = ArticlesSerializer
-    # permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
 
 
