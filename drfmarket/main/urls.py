@@ -4,10 +4,13 @@ from django.urls import path, include
 from main.views import *
 
 urlpatterns = [
-    path('api/v1/articles/', ArticlesApiList.as_view()),
-    path('api/v1/articles/<int:pk>/',ArticlesAPIUpdate.as_view()),
-    path('api/v1/articlesdelete/<int:pk>/', ArticlesAPIDestroy.as_view()),
+    path('articles/', ArticlesApiList.as_view()),
+    path('articles/<int:pk>/',ArticlesAPIUpdate.as_view()),
+    path('articlesdelete/<int:pk>/', ArticlesAPIDestroy.as_view()),
     path('category/<slug:cat_slug>/',ShowCategoryApiList.as_view() ,name='category'),
-    path('api/v1/all_category/',CategoryArticlesApiList.as_view()),
-    path('api/v1/auth/', include('rest_framework.urls')),
+    path('all_category/',CategoryArticlesApiList.as_view()),
+    path('auth/', include('rest_framework.urls')),
+    path('cart/', CartApiList.as_view(), name='cart-list'),
+    path('cart/<int:pk>/', CartAPIUpdate.as_view(), name='cart-detail'),
+    path('cart/<int:pk>/', CartAPIDestroy.as_view())
 ]
