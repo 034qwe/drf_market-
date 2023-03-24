@@ -12,6 +12,9 @@ from rest_framework.pagination import PageNumberPagination
 from .models import  *
 
 
+#####
+#Articles and CategoryArticles CRUD classes
+#####
 class ArticlesAPIPagination(PageNumberPagination):
     page_size = 3
     page_size_query_param = 'page_size'
@@ -60,3 +63,31 @@ class ArticlesAPIDestroy(generics.RetrieveDestroyAPIView):
 
 #     def get_queryset(self):
 #         return Articles.objects.all()
+
+#####
+#Cart CRUD classes
+#####
+
+class CartApiList(generics.ListCreateAPIView):
+    serializer_class = CartSerializer
+    # permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
+
+
+class CartAPIUpdate(generics.UpdateAPIView):
+    serializer_class = CartSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
+
+
+class CartAPIDestroy(generics.DestroyAPIView):
+    serializer_class = CartSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
