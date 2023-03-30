@@ -64,30 +64,3 @@ class ArticlesAPIDestroy(generics.RetrieveDestroyAPIView):
 #     def get_queryset(self):
 #         return Articles.objects.all()
 
-#####
-#Cart CRUD classes
-#####
-
-class CartApiList(generics.ListCreateAPIView):
-    serializer_class = CartSerializer
-    # permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
-
-
-class CartAPIUpdate(generics.UpdateAPIView):
-    serializer_class = CartSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
-
-
-class CartAPIDestroy(generics.DestroyAPIView):
-    serializer_class = CartSerializer
-    permission_classes = (IsAuthenticated,)
-
-
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
