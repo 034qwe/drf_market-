@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser,IsAuthenticated
 from main.permissions import IsOwnerOrReadOnly
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin,DestroyModelMixin
 from .serializers import *
 
 
@@ -20,7 +20,7 @@ class CartView(generics.CreateAPIView):
     serializer_class = CartSerializer
 
 
-class CartViewSet(CreateModelMixin, GenericViewSet):
+class CartViewSet(CreateModelMixin,RetrieveModelMixin,DestroyModelMixin, GenericViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
