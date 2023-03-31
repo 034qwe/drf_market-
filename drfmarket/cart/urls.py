@@ -9,7 +9,7 @@ router = routers.DefaultRouter()
 router.register('carts', CartViewSet)
 
 urlpatterns = [
-    path('api/v1/',include(router.urls))
+    path('',include(router.urls))
 
 ]
 
