@@ -6,10 +6,13 @@ from rest_framework import routers
 from .views import *
 
 router = routers.DefaultRouter()
-router.register('carts', CartViewSet)
+router.register('allcarts', CartAllViewSet)
+
+
 
 urlpatterns = [
-    path('',include(router.urls))
+    path('',include(router.urls)),
+    path('cartuser/', CartUserAPIView.as_view())
 
 ]
 
