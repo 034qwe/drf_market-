@@ -34,3 +34,11 @@ class CartSerializer(serializers.ModelSerializer):
         items = cart.items.all()
         return sum([item.quantity * item.product.price for item in items])
 
+class CartUserSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True)
+
+
+    class Meta:
+        model = Cart
+        fields = ['items']
+    
