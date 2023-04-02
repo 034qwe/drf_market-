@@ -13,15 +13,19 @@ from .serializers import *
 
 from .models import  *
 
+class CartUserAPIView(generics.ListAPIView):
+    def get_queryset(self):
+        return Cart.objects.filter(user_cart=self.request.user)
 
-class CartView(generics.CreateAPIView):
-    def get_queryset(self,request):
-        return Cart.objects.get(user=request.user)
+
     serializer_class = CartSerializer
 
 
-class CartViewSet(CreateModelMixin,RetrieveModelMixin,DestroyModelMixin, GenericViewSet):
+
+
+class CartAllViewSet(CreateModelMixin,RetrieveModelMixin,DestroyModelMixin, GenericViewSet):
     queryset = Cart.objects.all()
+
     serializer_class = CartSerializer
 
 # class AddToCartView(APIView):
