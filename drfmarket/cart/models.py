@@ -8,11 +8,10 @@ import uuid
 from main.models import Articles
 
 # Create your models here.
-
 class Cart(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     created = models.DateTimeField(auto_now_add=True)
-    
+    user_cart = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
 
     def __str__(self):
         return str(self.id)
