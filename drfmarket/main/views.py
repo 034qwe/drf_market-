@@ -47,7 +47,7 @@ class CategoryArticlesApiList(generics.ListCreateAPIView):
 class ArticlesAPIUpdate(generics.UpdateAPIView):
     queryset = Articles.objects.all()
     serializer_class = ArticlesSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+    # permission_classes = (IsOwnerOrReadOnly,)
 
 
 class ArticlesAPIDestroy(generics.RetrieveDestroyAPIView):
