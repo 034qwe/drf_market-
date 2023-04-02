@@ -2,13 +2,13 @@ from django.shortcuts import render
 from rest_framework import generics ,viewsets , status
 from main.serializers import *
 from rest_framework.views import Response,APIView
-from django.forms import model_to_dict
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser,IsAuthenticated
 from main.permissions import IsOwnerOrReadOnly
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin,DestroyModelMixin
 from .serializers import *
+from rest_framework.permissions import IsAuthenticated
 
 
 from .models import  *
@@ -17,10 +17,21 @@ class CartUserAPIView(generics.ListAPIView):
     def get_queryset(self):
         return Cart.objects.filter(user_cart=self.request.user)
 
-
     serializer_class = CartSerializer
+    permission_classes = (IsAuthenticated,)
 
 
+
+class CartUserDeleteAPIView(generics.DestroyAPIView):
+    def get_queryset(self):
+        return Cart.objects.filter(user_cart=self.request.user)
+        
+
+    serializer_class =  CartUserSerializer
+
+class CartAllAPIView(generics.ListAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
 
 
 class CartAllViewSet(CreateModelMixin,RetrieveModelMixin,DestroyModelMixin, GenericViewSet):
