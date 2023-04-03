@@ -13,16 +13,19 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import  *
 
-class CartUserAPIView(generics.ListAPIView):
+
+
+
+class CartUserAPIList(generics.ListAPIView):
     def get_queryset(self):
         return Cart.objects.filter(user_cart=self.request.user)
 
-    serializer_class = CartSerializer
+    serializer_class = CartUserSerializer
     permission_classes = (IsAuthenticated,)
 
 
 
-class CartUserDeleteAPIView(generics.DestroyAPIView):
+class CartUserAPIDestroy(generics.DestroyAPIView):
     def get_queryset(self):
         return Cart.objects.filter(user_cart=self.request.user)
         
