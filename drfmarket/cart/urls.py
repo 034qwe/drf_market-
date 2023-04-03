@@ -12,8 +12,8 @@ router.register('allcarts', CartAllViewSet)
 
 urlpatterns = [
     path('',include(router.urls)),
-    path('cartuser/', CartUserAPIView.as_view()),
-    path('cartuserdelete/<int:pk>/', CartUserDeleteAPIView.as_view()),
+    path('cartuser/', CartUserAPIList.as_view()),
+    path('cartuserdelete/<int:pk>/', CartUserAPIDestroy.as_view()),
     path('carts/',CartAllAPIView.as_view())
 
 ]
