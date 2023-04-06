@@ -18,7 +18,7 @@ from .models import  *
 
 class CartUserAPIList(generics.ListAPIView):
     def get_queryset(self):
-        return Cart.objects.filter(user_cart=self.request.user)
+        return Cartitems.objects.filter(cart__user_cart=self.request.user)
 
     serializer_class = CartUserSerializer
     permission_classes = (IsAuthenticated,)
@@ -27,12 +27,11 @@ class CartUserAPIList(generics.ListAPIView):
 
 class CartUserAPIDestroy(generics.DestroyAPIView):
     def get_queryset(self):
-        return Cart.objects.filter(user_cart=self.request.user)
-        
+        return Cartitems.objects.filter(cart__user_cart=self.request.user)
 
     serializer_class =  CartUserSerializer
 
-class CartAllAPIView(generics.ListAPIView):
+class CartAllAPIView(generics.ListCreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
@@ -41,19 +40,3 @@ class CartAllViewSet(CreateModelMixin,RetrieveModelMixin,DestroyModelMixin, Gene
     queryset = Cart.objects.all()
 
     serializer_class = CartSerializer
-
-# class AddToCartView(APIView):
-#     def post(self, request):
-#         cart = Cart.objects.get(user=request.user)
-#         serializer = CartItemSerializer(data=request.data)
-#         if serializer.is_valid():
-#             product_id = serializer.validated_data['product']
-#             quantity = serializer.validated_data.get('quantity', 1)
-#             product = Articles.objects.get(pk=product_id)
-#             cart_item, created = CartItem.objects.get_or_create(product=product, defaults={'quantity': quantity})
-#             if not created:
-#                 cart_item.quantity += quantity
-#                 cart_item.save()
-#             cart.items.add(cart_item)
-#             return Response({'success': True})
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
