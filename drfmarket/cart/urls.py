@@ -14,7 +14,8 @@ urlpatterns = [
     path('',include(router.urls)),
     path('cartuser/', CartUserAPIList.as_view()),
     path('cartuserdelete/<int:pk>/', CartUserAPIDestroy.as_view()),
-    path('carts/',CartAllAPIView.as_view())
+    path('carts/',CartAllAPIView.as_view()),
+    path('cartadd/',CartAPICreate.as_view())
 
 ]
 
