@@ -36,6 +36,12 @@ class CartAllAPIView(generics.ListCreateAPIView):
     serializer_class = CartSerializer
 
 
+class CartAPICreate(generics.ListCreateAPIView):
+    model = Cart
+    queryset = Cart.objects.all()
+    serializer_class = CartCreateSerializer
+
+
 class CartAllViewSet(CreateModelMixin,RetrieveModelMixin,DestroyModelMixin, GenericViewSet):
     queryset = Cart.objects.all()
 
