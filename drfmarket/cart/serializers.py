@@ -42,3 +42,12 @@ class CartUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cartitems
         fields = ['product']
+
+
+
+class CartCreateSerializer(serializers.ModelSerializer):
+    user_cart = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Cart
+        fields = '__all__'
