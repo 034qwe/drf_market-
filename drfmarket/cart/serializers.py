@@ -51,3 +51,17 @@ class CartCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = '__all__'
+
+
+class CartItemsUserAdd(serializers.ModelSerializer):
+    def _user(self, obj):
+        request = self.context.get('request', None)
+        if request:
+            return request.user
+    
+
+    cart =  serializers.HiddenField(default=Cartitems.objects.get(cart__user_cart=_user()))
+
+    class Meta:
+        model = Cartitems
+        fields = '__all__'
