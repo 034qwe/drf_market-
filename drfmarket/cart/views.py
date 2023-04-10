@@ -18,12 +18,15 @@ from .models import  *
 
 class CartUserAPIList(generics.ListAPIView):
     def get_queryset(self):
+        print(Cart.objects.get(user_cart=self.request.user))
         return Cartitems.objects.filter(cart__user_cart=self.request.user)
+        
+
+
 
     serializer_class = CartUserSerializer
     permission_classes = (IsAuthenticated,)
-
-
+    
 
 class CartUserAPIDestroy(generics.DestroyAPIView):
     def get_queryset(self):
@@ -46,3 +49,9 @@ class CartAllViewSet(CreateModelMixin,RetrieveModelMixin,DestroyModelMixin, Gene
     queryset = Cart.objects.all()
 
     serializer_class = CartSerializer
+
+
+class CartItemsUserApiAdd(generics.CreateAPIView):
+    queryset = Cartitems.objects.all()
+
+    serializer_class = CartItemsUserAdd
