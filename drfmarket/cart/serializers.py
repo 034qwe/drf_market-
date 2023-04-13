@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Cart,Cartitems
 from main.serializers import ArticlesSerializer
+from main.models import Articles
 
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -54,14 +55,17 @@ class CartCreateSerializer(serializers.ModelSerializer):
 
 
 class CartItemsUserAdd(serializers.ModelSerializer):
-    def _user(self, obj):
-        request = self.context.get('request', None)
-        if request:
-            return request.user
-    
 
-    cart =  serializers.HiddenField(default=Cartitems.objects.get(cart__user_cart=_user()))
+    
+    cart =  serializers.SerializerMethodField(method_name='useer')
+
+    def useer(self,*args, **kwargs):
+        request = self.context.get("request")
+        user = request.user.id
+        return Cart.objects.get(user_cart=user).id
+  
 
     class Meta:
         model = Cartitems
-        fields = '__all__'
+        fields = ['cart','product','quantity']
+
