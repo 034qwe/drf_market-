@@ -55,3 +55,7 @@ class CartItemsUserApiAdd(generics.CreateAPIView):
     queryset = Cartitems.objects.all()
 
     serializer_class = CartItemsUserAdd
+
+
+
+#я залетаю на биток,серега кипиток,дела все на потом ведь я врубаю свой поток 
