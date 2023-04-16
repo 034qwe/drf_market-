@@ -56,16 +56,19 @@ class CartCreateSerializer(serializers.ModelSerializer):
 
 class CartItemsUserAdd(serializers.ModelSerializer):
 
-    
-    cart =  serializers.SerializerMethodField(method_name='useer')
-
-    def useer(self,*args, **kwargs):
-        request = self.context.get("request")
-        user = request.user.id
-        return Cart.objects.get(user_cart=user).id
-  
 
     class Meta:
         model = Cartitems
-        fields = ['cart','product','quantity']
+        fields = ['product','quantity']
+
+    def create(self, validated_data):
+
+        request = self.context.get('request')
+        user = request.user
+        cart_obg = Cart.objects.get(user_cart=user)
+        cartitem = Cartitems.objects.create(
+            **validated_data,
+            cart = cart_obg
+        )
+        return cartitem
 
