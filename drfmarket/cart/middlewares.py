@@ -10,7 +10,6 @@ class CartMiddleware:
 
     def __call__(self, request, *args, **kwargs):
         
-        print(request.user.id)
         response = self._get_response(request, *args, **kwargs)
 
         return response
