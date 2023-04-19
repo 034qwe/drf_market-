@@ -22,7 +22,6 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
-    id  = serializers.UUIDField(read_only=True)
     items = CartItemSerializer(many=True)
     all_price = serializers.SerializerMethodField(method_name='all_total')
 
@@ -42,7 +41,7 @@ class CartUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cartitems
-        fields = ['product','quantity']
+        fields = ['id','product','quantity']
 
 
 
