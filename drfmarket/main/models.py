@@ -1,8 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-# Create your models here.
 
+from versatileimagefield.fields import VersatileImageFiel
 
 class Articles(models.Model):
     title=models.CharField('title',max_length=40)
@@ -31,4 +31,34 @@ class Category_Articles(models.Model):
 
     def __str__(self):
         return self.name
+
+class BaseImage(models.Model):
+    """Basic model for images"""
+    title = models.CharField(max_length=200, null=True, blank=True)
+    alt = models.CharField(max_length=200, null=True, blank=True)
+    image = models.VersatileImageField(null=True, blank=True, upload_to='images')
+
+    class Meta:
+        abstract = True
+        verbose_name = "Image"
+        verbose_name_plural = "Images"
+
+    def __str__(self):
+        res = ''
+        if self.title:
+            res = self.title
+        else:
+            res = self.image.url
+        return res
+
+
+
+
+class ArticlesImage(BaseImage):
+    post = models.ForeignKey(Articles, on_delete=models.CASCADE, null=True, blank=True)
+
+
+
+
+
 
