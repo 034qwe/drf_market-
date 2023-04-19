@@ -1,13 +1,7 @@
 from rest_framework import serializers
 from .models import *
+from versatileimagefield.serializers import VersatileImageFieldSerializer
 
-
-class ArticlesSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
-    class Meta():
-        model = Articles
-        fields = '__all__'
 
 
 class CategoryArticlesSerializer(serializers.ModelSerializer):
@@ -16,3 +10,25 @@ class CategoryArticlesSerializer(serializers.ModelSerializer):
         fields = ('name',)
 
 
+class ArticlesImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArticlesImage
+        fields = '__all__'
+
+    image = VersatileImageFieldSerializer(
+        sizes=[
+            ('full_size', 'url'),
+            ('thumbnail', 'thumbnail__100x100'),
+            ('medium_square_crop', 'crop__400x400'),
+            ('small_square_crop', 'crop__50x50')
+        ]
+    )
+
+
+class ArticlesSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    images = ArticlesImageSerializer(source='postimage_set',many=True)
+
+    class Meta():
+        model = Articles
+        fields = '__all__'
