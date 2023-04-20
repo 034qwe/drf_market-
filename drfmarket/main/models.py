@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-from versatileimagefield.fields import VersatileImageFiel
+from versatileimagefield.fields import VersatileImageField
 
 class Articles(models.Model):
     title=models.CharField('title',max_length=40)
@@ -32,11 +32,12 @@ class Category_Articles(models.Model):
     def __str__(self):
         return self.name
 
+
 class BaseImage(models.Model):
     """Basic model for images"""
     title = models.CharField(max_length=200, null=True, blank=True)
     alt = models.CharField(max_length=200, null=True, blank=True)
-    image = models.VersatileImageField(null=True, blank=True, upload_to='images')
+    image = VersatileImageField(null=True, blank=True, upload_to='images')
 
     class Meta:
         abstract = True

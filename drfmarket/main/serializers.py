@@ -27,7 +27,7 @@ class ArticlesImageSerializer(serializers.ModelSerializer):
 
 class ArticlesSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    images = ArticlesImageSerializer(source='postimage_set',many=True)
+    images = ArticlesImageSerializer(source='articlesimage_set',many=True)
 
     class Meta():
         model = Articles
