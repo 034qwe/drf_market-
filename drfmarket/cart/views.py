@@ -45,17 +45,10 @@ class CartAPICreate(generics.ListCreateAPIView):
     serializer_class = CartCreateSerializer
 
 
-class CartAllViewSet(CreateModelMixin,RetrieveModelMixin,DestroyModelMixin, GenericViewSet):
-    queryset = Cart.objects.all()
-
-    serializer_class = CartSerializer
-
-
 class CartItemsUserApiAdd(generics.CreateAPIView):
     queryset = Cartitems.objects.all()
 
     serializer_class = CartItemsUserAdd
-
 
 
 #я залетаю на биток,серега кипиток,дела все на потом ведь я врубаю свой поток 
