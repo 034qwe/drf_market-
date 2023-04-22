@@ -27,6 +27,16 @@ class ArticlesApiList(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = ArticlesAPIPagination
 
+class ShowArticlesApiList(generics.ListAPIView):
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+
+        return Articles.objects.filter(pk=pk)
+    
+    serializer_class = ArticlesSerializer
+
+        
+
 
 class ShowCategoryApiList(generics.ListCreateAPIView):
     def get_queryset(self):
