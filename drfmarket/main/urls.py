@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from main.views import *
 
 
@@ -8,9 +8,11 @@ from main.views import *
 
 urlpatterns = [
     path('articles/', ArticlesApiList.as_view()),
-    path('articles/<int:pk>/',ArticlesAPIUpdate.as_view()),
+    path('articlesupdate/<int:pk>/',ArticlesAPIUpdate.as_view()),
     path('articlesdelete/<int:pk>/', ArticlesAPIDestroy.as_view()),
     path('category/<slug:cat_slug>/',ShowCategoryApiList.as_view() ,name='category'),
     path('all_category/',CategoryArticlesApiList.as_view()),
-    path('auth/', include('rest_framework.urls')),
+    path('drf-auth', include('rest_framework.urls')),
+    path('auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]
