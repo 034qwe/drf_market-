@@ -8,6 +8,14 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser,Is
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.pagination import PageNumberPagination
 
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+from django.shortcuts import redirect
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.views import View
+from djoser import utils
 
 from .models import  *
 
@@ -66,53 +74,38 @@ class ArticlesAPIDestroy(generics.RetrieveDestroyAPIView):
 
 
 
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from djoser.views import PasswordResetView
-from djoser.serializers import PasswordResetSerializer
-from django.utils.translation import ugettext_lazy as _
-from django.core.mail import send_mail
-from django.template import loader
-from django.urls import reverse
-from django.conf import settings
-from djoser import utils
-from djoser.conf import settings as djoser_settings
 
 
-class CustomPasswordResetView(PasswordResetView):
-    serializer_class = PasswordResetSerializer
+class CustomPasswordResetView(APIView):
+    def post(self, request):
+        print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
+        email1 = request.data.get('email')
+        user = User.objects.get(email=email1)
+        
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.user
-        context = {
-            'email': user.email,
-            'domain': request.META['HTTP_HOST'],
-            'site_name': 'Your Site',
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'user': user,
-            'token': default_token_generator.make_token(user),
-            'protocol': 'http',
-        }
-        self.send_reset_password_email(context)
-        return Response({'detail': _('Password reset e-mail has been sent.')})
-    
-    def send_reset_password_email(self, user):
-        context = {
-            'email': user.email,
-            'domain': djoser_settings.get('DOMAIN') or self.request.get_host(),
-            'site_name': djoser_settings.get('SITE_NAME'),
-            'uid': utils.encode_uid(user.pk),
-            'user': user,
-            'token': utils.default_token_generator.make_token(user),
-            'protocol': 'http',
-            'url_reset_password': reverse('password_reset_confirm'),
-        }
-        subject_template_name = 'password_reset_subject.txt'
-        email_template_name = 'password_reset_email.html'
-        subject = loader.render_to_string(subject_template_name, context)
-        subject = ''.join(subject.splitlines())
-        email = loader.render_to_string(email_template_name, context)
-        send_mail(subject, email, settings.DEFAULT_FROM_EMAIL, [user.email])
+        # Generate token and uid for password reset
+        token = default_token_generator.make_token(user)
+        uid = utils.encode_uid(user.pk)
+
+        # Build password reset URL
+        current_site = get_current_site(request)
+        reset_url = reverse('password_reset_confirm', kwargs={'uid': uid, 'token': token})
+        reset_url = f"http://{current_site.domain}{reset_url}"
+
+        # Build email subject and content
+        subject = 'Reset your password'
+        message = render_to_string('email/password_reset.html', {
+            'reset_url': reset_url,
+        })
+
+        # Send email
+        email = EmailMessage(subject, message, to=[email1])
+        email.send()
+
+        return redirect('password_reset_done')
+
+class PasswordResetView(APIView):
+
+    def get(self, request, uid, token):
+       post_data = {'uid': uid, 'token': token}
+       return Response(post_data)
