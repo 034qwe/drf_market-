@@ -64,7 +64,7 @@ class CartItemsUserAdd(serializers.ModelSerializer):
 
         request = self.context.get('request')
         user = request.user
-        cart_obg = Cart.objects.get(user_cart=user)
+        cart_obg,created = Cart.objects.get_or_create(user_cart=user)
         cartitem = Cartitems.objects.create(
             **validated_data,
             cart = cart_obg
