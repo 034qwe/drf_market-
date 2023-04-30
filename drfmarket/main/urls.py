@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from main.views import (
     ArticlesApiList,
-    CustomPasswordResetView,
     ShowArticlesApiList,
     ArticlesAPIUpdate,
     ArticlesAPIDestroy,
@@ -16,7 +15,7 @@ from main.views import (
 
 urlpatterns = [
     path('articles/', ArticlesApiList.as_view()),
-    re_path(r'^reset/password/reset/confirm/<str:uidb64>/<str:token>',
+    re_path(r'^reset/password/reset/<uidb64>/<token>/',
     PasswordResetView.as_view(),name='password_reset_confirm'),
     path('articles/<int:pk>/',ShowArticlesApiList.as_view()),
     path('articlesupdate/<int:pk>/',ArticlesAPIUpdate.as_view()),
@@ -26,6 +25,5 @@ urlpatterns = [
     path('drf-auth', include('rest_framework.urls')),
     path('auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
-    path('auth/password/reset/', CustomPasswordResetView.as_view(), name='password_reset'),
-    
+
 ]

@@ -74,36 +74,6 @@ class ArticlesAPIDestroy(generics.RetrieveDestroyAPIView):
 
 
 
-
-
-class CustomPasswordResetView(APIView):
-    def post(self, request):
-        print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
-        email1 = request.data.get('email')
-        user = User.objects.get(email=email1)
-        
-
-        # Generate token and uid for password reset
-        token = default_token_generator.make_token(user)
-        uid = utils.encode_uid(user.pk)
-
-        # Build password reset URL
-        current_site = get_current_site(request)
-        reset_url = reverse('password_reset_confirm', kwargs={'uid': uid, 'token': token})
-        reset_url = f"http://{current_site.domain}{reset_url}"
-
-        # Build email subject and content
-        subject = 'Reset your password'
-        message = render_to_string('email/password_reset.html', {
-            'reset_url': reset_url,
-        })
-
-        # Send email
-        email = EmailMessage(subject, message, to=[email1])
-        email.send()
-
-        return redirect('password_reset_done')
-
 class PasswordResetView(APIView):
 
     def get(self, request, uid, token):
