@@ -33,11 +33,12 @@ class CartUserAPIDestroy(generics.DestroyAPIView):
         return Cartitems.objects.filter(cart__user_cart=self.request.user)
 
     serializer_class =  CartUserSerializer
+    permission_classes = (IsAuthenticated)
 
 class CartAllAPIView(generics.ListCreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-
+    permission_classes = (IsAdminUser)
 
 class CartAPICreate(generics.ListCreateAPIView):
     model = Cart
@@ -49,6 +50,7 @@ class CartItemsUserApiAdd(generics.CreateAPIView):
     queryset = Cartitems.objects.all()
 
     serializer_class = CartItemsUserAdd
+    permission_classes = (IsAuthenticated)
 
 
 #я залетаю на биток,серега кипиток,дела все на потом ведь я врубаю свой поток 
