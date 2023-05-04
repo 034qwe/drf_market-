@@ -18,7 +18,7 @@ from .models import  *
 
 class CartUserAPIList(generics.ListAPIView):
     def get_queryset(self):
-        print(Cart.objects.get(user_cart=self.request.user))
+
         return Cartitems.objects.filter(cart__user_cart=self.request.user)
         
 
@@ -50,7 +50,22 @@ class CartItemsUserApiAdd(generics.CreateAPIView):
     queryset = Cartitems.objects.all()
 
     serializer_class = CartItemsUserAdd
-    permission_classes = (IsAuthenticated)
+    permission_classes = (IsAuthenticated,)
 
 
+class CartOrderAPIView(generics.CreateAPIView):
+    serializer_class = CartOrderSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Cart.objects.filter(user_cart=user)
+    
+
+    def perform_create(self, serializer):
+        cart = self.get_queryset().first()
+
+        purchase = serializer.save(cart=cart)
+
+
+        cart.items.all().delete()
 #я залетаю на биток,серега кипиток,дела все на потом ведь я врубаю свой поток 
