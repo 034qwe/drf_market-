@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cart,Cartitems
+from .models import Cart,Cartitems, CartOrder
 from main.serializers import ArticlesSerializer
 from main.models import Articles
 
@@ -54,20 +54,27 @@ class CartCreateSerializer(serializers.ModelSerializer):
 
 
 class CartItemsUserAdd(serializers.ModelSerializer):
-
-
     class Meta:
         model = Cartitems
         fields = ['product','quantity']
-
+    
     def create(self, validated_data):
-
-        request = self.context.get('request')
+        request = self.context.get("request")
         user = request.user
-        cart_obg,created = Cart.objects.get_or_create(user_cart=user)
+
+        cart_obj, created = Cart.objects.get_or_create(user_cart=user)
+
         cartitem = Cartitems.objects.create(
-            **validated_data,
-            cart = cart_obg
+            **validated_data, 
+            cart=cart_obj
         )
+
         return cartitem
 
+
+class CartOrderSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = CartOrder
+        fields = '__all__'
