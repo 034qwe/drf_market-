@@ -13,6 +13,7 @@ class Cart(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user_cart = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
 
+
     def __str__(self):
         return str(self.id)
 
@@ -22,3 +23,9 @@ class Cartitems(models.Model):
     quantity = models.IntegerField(default=1)
 
 
+class CartOrder(models.Model):
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, related_name='purchase')
+    cartorder_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Purchase {self.id}"
