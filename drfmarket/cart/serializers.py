@@ -73,8 +73,25 @@ class CartItemsUserAdd(serializers.ModelSerializer):
 
 
 class CartOrderSerializer(serializers.ModelSerializer):
-
+    
 
     class Meta:
         model = CartOrder
-        fields = '__all__'
+        fields = ['cartorder_date']
+    
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        user = request.user
+
+        cart_obj, created = Cart.objects.get_or_create(user_cart=user)
+
+        cartord= CartOrder.objects.create(
+            **validated_data, 
+            cart=cart_obj
+        )
+
+        cart_obj.items.all().delete()
+
+
+        return cartord
