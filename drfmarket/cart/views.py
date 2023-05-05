@@ -61,11 +61,5 @@ class CartOrderAPIView(generics.CreateAPIView):
         return Cart.objects.filter(user_cart=user)
     
 
-    def perform_create(self, serializer):
-        cart = self.get_queryset().first()
 
-        purchase = serializer.save(cart=cart)
-
-
-        cart.items.all().delete()
 #я залетаю на биток,серега кипиток,дела все на потом ведь я врубаю свой поток 
