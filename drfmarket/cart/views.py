@@ -38,7 +38,7 @@ class CartUserAPIDestroy(generics.DestroyAPIView):
 class CartAllAPIView(generics.ListCreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    permission_classes = (IsAdminUser)
+    permission_classes = (IsAdminUser,)
 
 class CartAPICreate(generics.ListCreateAPIView):
     model = Cart
@@ -58,7 +58,7 @@ class CartOrderAPIView(generics.CreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Cart.objects.filter(user_cart=user)
+        return Cartitems.objects.filter(cart__user_cart=user)
     
 
 
