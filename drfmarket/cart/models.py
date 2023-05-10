@@ -24,8 +24,9 @@ class Cartitems(models.Model):
 
 
 class CartOrder(models.Model):
-    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, related_name='purchase')
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='purchase')
     cartorder_date = models.DateTimeField(auto_now_add=True)
+    product1 = models.ForeignKey(Cartitems, on_delete=models.CASCADE, blank=True, null=True, related_name='product1')
 
     def __str__(self):
         return f"Purchase {self.id}"
