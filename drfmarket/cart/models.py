@@ -26,7 +26,7 @@ class Cartitems(models.Model):
 class CartOrder(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='purchase')
     cartorder_date = models.DateTimeField(auto_now_add=True)
-    product1 = models.ForeignKey(Cartitems, on_delete=models.CASCADE, blank=True, null=True, related_name='product1')
+    product1 = models.ForeignKey(Cartitems, on_delete=models.CASCADE, blank=True, null=True, )
 
     def __str__(self):
         return f"Purchase {self.id}"
