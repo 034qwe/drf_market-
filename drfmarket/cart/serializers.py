@@ -74,11 +74,11 @@ class CartItemsUserAdd(serializers.ModelSerializer):
 
 
 class CartOrderSerializer(serializers.ModelSerializer):
-
+    item_ids = serializers.IntegerField()
 
     class Meta:
         model = CartOrder
-        fields = ['cartorder_date']
+        fields = ['cartorder_date','item_ids']
     
 
     def create(self, validated_data):
@@ -96,9 +96,9 @@ class CartOrderSerializer(serializers.ModelSerializer):
             owner=owner_obj,
 
         )
-        cartord.product1.set(product_obj)
+        # cartord.product1.set(product_obj)
 
-        # cart_obj.items.all().delete()
+        cart_obj.items.all().delete()
 
 
         return cartord
