@@ -74,31 +74,41 @@ class CartItemsUserAdd(serializers.ModelSerializer):
 
 
 class CartOrderSerializer(serializers.ModelSerializer):
-    item_ids = serializers.IntegerField()
+    item_ids = serializers.ListField()
+
 
     class Meta:
         model = CartOrder
         fields = ['cartorder_date','item_ids']
     
 
+    def validate_item_ids(self, value):
+        for val in value:
+            if not Cartitems.objects.filter(pk=val).exists():
+                raise serializers.ValidationError('CartItem not found')
+        return value
+
     def create(self, validated_data):
         request = self.context.get("request")
         user = request.user
 
-        cart_obj = Cart.objects.get(user_cart=user)
-
+        item_ids = validated_data['item_ids']
         owner_obj = User.objects.get(username=user)
-        product_obj = Cartitems.objects.filter(cart=cart_obj)
 
 
         cartord= CartOrder.objects.create(
-            **validated_data, 
+            # **validated_data,
             owner=owner_obj,
 
         )
+
         # cartord.product1.set(product_obj)
 
-        cart_obj.items.all().delete()
-
+        for item_id in item_ids:
+            obj=Cartitems.objects.get(id=item_id)
+            cartord.product1.add(obj)
+            
+        # cart_obj.items.all().delete()  need
 
         return cartord
+        
