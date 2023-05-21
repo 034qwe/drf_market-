@@ -91,23 +91,25 @@ class CartOrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get("request")
         user = request.user
-
         item_ids = validated_data['item_ids']
-        owner_obj = User.objects.get(username=user)
-
 
         cartord= CartOrder.objects.create(
             # **validated_data,
-            owner=owner_obj,
+            owner=user
 
         )
-
         # cartord.product1.set(product_obj)
 
-        for item_id in item_ids:
-            obj=Cartitems.objects.get(id=item_id)
-            cartord.product1.add(obj)
-            
+    
+        cartit = Cartitems.objects.filter(id__in=item_ids)
+        for obj in cartit:
+            if cartit.index(obj) == 0:
+                cartord.product = cartit.first()
+            else:
+                cartord.product.add(obj)
+
+
+
         # cart_obj.items.all().delete()  need
 
         return cartord
