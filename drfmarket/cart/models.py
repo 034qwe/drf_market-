@@ -19,18 +19,17 @@ class Cart(models.Model):
 
 class Cartitems(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE,related_name='items', blank=True, null=True)
-    #order =
     product = models.ForeignKey(Articles, on_delete=models.CASCADE, blank=True, null=True, related_name='cartitems')
     quantity = models.IntegerField(default=1)
 
 
 class CartOrder(models.Model):
-    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='purchase')
+    owner = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='purchase')
     cartorder_date = models.DateTimeField(auto_now_add=True)
-    product = models.ManyToManyField(Cartitems, null=True,related_name='product_order')
+    product = models.ForeignKey(Cartitems,on_delete=models.CASCADE, null=True,related_name='product_order')
 
     def __str__(self):
-        return f"Purchase {self.id}"
+        return f"cart={self.owner}"
 
 #### короче ідея зробити карт ордер так само як карт геть потім ще одну модеть ордеркарт
 #  як карт ітем тіки вже замість продукта буде екземпляр кат ітема а замість карт карт ордер
