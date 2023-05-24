@@ -74,43 +74,46 @@ class CartItemsUserAdd(serializers.ModelSerializer):
 
 
 class CartOrderSerializer(serializers.ModelSerializer):
-    item_ids = serializers.ListField()
+    # item_ids = serializers.ListField()
 
 
     class Meta:
         model = CartOrder
-        fields = ['cartorder_date','item_ids']
+        fields = ['cartorder_date',]
     
 
-    def validate_item_ids(self, value):
-        for val in value:
-            if not Cartitems.objects.filter(pk=val).exists():
-                raise serializers.ValidationError('CartItem not found')
-        return value
+    # def validate_item_ids(self, value):
+    #     for val in value:
+    #         if not Cartitems.objects.filter(pk=val).exists():
+    #             raise serializers.ValidationError('CartItem not found')
+    #     return value
 
     def create(self, validated_data):
         request = self.context.get("request")
         user = request.user
-        item_ids = validated_data['item_ids']
+        cart_owner = Cart.objects.get(user_cart=user)
+        product = Cartitems.objects.filter(cart__user_cart=user)
+        # item_ids = validated_data['item_ids']
 
-        cartord= CartOrder.objects.create(
-            # **validated_data,
-            owner=user
+        # cartord= CartOrder.objects.create(
+        #     **validated_data,
+        #     owner=user
+
+        # )
+
+
+        cartit = Cartitems.objects.filter(id__in=product)
+
+        for obj in cartit:         
+            CartOrder.objects.create(
+            **validated_data,
+            owner=cart_owner,
+            product=obj
 
         )
-        # cartord.product1.set(product_obj)
-
-    
-        cartit = Cartitems.objects.filter(id__in=item_ids)
-        for obj in cartit:
-            if cartit.index(obj) == 0:
-                cartord.product = cartit.first()
-            else:
-                cartord.product.add(obj)
 
 
 
-        # cart_obj.items.all().delete()  need
+        # cart_obj.items.all().delete() 
 
-        return cartord
-        
+        return cart_owner
