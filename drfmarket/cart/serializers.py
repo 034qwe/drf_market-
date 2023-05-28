@@ -117,7 +117,7 @@ class CartOrderSerializer(serializers.ModelSerializer):
         # )
         for obj in cartit:
             obj.order = CartOrder.objects.get(owner=user)
-            print(f'AAAAAAAAAAAAAAAAAAAAAAAAAA{obj.order}AAAAAAAAAAAAAAAAAAAAAAAAAAA')
+
             obj.save()
             if obj.order:
                 obj.cart = None
@@ -132,8 +132,8 @@ class CartOrderSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    product = CartItemSerializer()
+    product = ArticlesSerializer()
 
     class Meta():
-        model = CartOrder
+        model = Cartitems
         fields = '__all__'
