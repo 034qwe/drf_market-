@@ -21,9 +21,6 @@ class CartUserAPIList(generics.ListAPIView):
 
         return Cartitems.objects.filter(cart__user_cart=self.request.user)
         
-
-
-
     serializer_class = CartUserSerializer
     permission_classes = (IsAuthenticated,)
     
@@ -60,6 +57,10 @@ class CartOrderAPIView(generics.CreateAPIView):
         user = self.request.user
         return Cartitems.objects.filter(cart__user_cart=user)
     
-
+class OrderAPIView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    def get_queryset(self):
+        user = self.request.user
+        return Cartitems.objects.filter(order__owner=user)
 
 #я залетаю на биток,серега кипиток,дела все на потом ведь я врубаю свой поток 
