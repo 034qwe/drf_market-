@@ -99,36 +99,17 @@ class CartOrderSerializer(serializers.ModelSerializer):
         product = Cartitems.objects.filter(cart__user_cart=user)
 
 
-        # cartord= CartOrder.objects.create(
-        #     **validated_data,
-        #     owner=user
-
-        # )
-
-
         cartit = Cartitems.objects.filter(id__in=product)
 
-        # for obj in cartit:         
-        #     CartOrder.objects.create(
-        #     **validated_data,
-        #     owner=cart_owner,
-        #     product=obj
-
-        # )
         for obj in cartit:
-            obj.order = CartOrder.objects.get(owner=user)
+            obj.order = CartOrder.objects.get_or_create(owner=user)
 
             obj.save()
             if obj.order:
                 obj.cart = None
                 obj.save()
 
-
-
-
-        # cart_obj.items.all().delete() 
-
-        return cart_owner
+        return cartit
 
 
 class OrderSerializer(serializers.ModelSerializer):
