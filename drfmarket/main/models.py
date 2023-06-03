@@ -19,7 +19,7 @@ class Articles(models.Model):
         return reverse('post', kwargs={'post_slug':self.slug})
 
     def __str__(self):
-        return self.title
+        return f'{self.title} ({self.id})'
 
 
 class Category_Articles(models.Model):
