@@ -63,4 +63,10 @@ class OrderAPIView(generics.ListAPIView):
         user = self.request.user
         return Cartitems.objects.filter(order__owner=user)
 
+
+class OneOrderAPIView(generics.CreateAPIView):
+    serializer_class = OneOrderSerializer
+    def get_queryset(self):
+        user = self.request.user
+        return Cartitems.objects.filter(order__owner=user)
 #я залетаю на биток,серега кипиток,дела все на потом ведь я врубаю свой поток 
