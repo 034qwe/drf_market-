@@ -18,17 +18,6 @@ class CartItemSerializer(serializers.ModelSerializer):
         return cartitem.quantity * cartitem.product.price
 
 
-    # def validate(self, attrs):
-    #     cart = attrs.get('cart')
-    #     order = attrs.get('order')
-
-    #     if cart !=None:
-    #         order == None
-    #     if order != None:
-    #         cart == None
-            
-
-    #     return attrs
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -115,6 +104,29 @@ class CartOrderSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     product = ArticlesSerializer()
 
-    class Meta():
+    class Meta:
         model = Cartitems
         fields = '__all__'
+
+
+class OneOrderSerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField()
+
+    class Meta:
+        model = Cartitems
+        fields = '__all__'
+
+
+    def create(self, validated_data):
+        product_id = validated_data['product_id']
+        request = self.context.get("request")
+        user = request.user
+
+        crt = Cartitems.objects.create(
+            cart=None,
+            order=CartOrder.objects.get(owner=user),
+            product = Articles.objects.get(pk=product_id),
+            quantity = 1
+        )
+        return crt
+#всесте мы все на вайбе, мы круто вайбим, и нету кринжа 
