@@ -129,4 +129,4 @@ class OneOrderSerializer(serializers.ModelSerializer):
             quantity = 1
         )
         return crt
-#всесте мы все на вайбе, мы круто вайбим, и нету кринжа 
+#всесте.. мы все на вайбе, мы круто вайбим, и нет кринжа 
