@@ -32,6 +32,7 @@ class Cartitems(models.Model):
     order = models.ForeignKey(CartOrder,on_delete=models.CASCADE, blank=True, null=True)
     product = models.ForeignKey(Articles, on_delete=models.CASCADE, blank=True, null=True, related_name='cartitems')
     quantity = models.IntegerField(default=1)
+    is_bought = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.pk}"
