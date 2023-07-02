@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import  *
 
-
+from .tests import send_notification_to_telegram
 
 
 class CartUserAPIList(generics.ListAPIView):
@@ -70,3 +70,22 @@ class OneOrderAPIView(generics.CreateAPIView):
         user = self.request.user
         return Cartitems.objects.filter(order__owner=user)
 #я залетаю на биток,серега кипиток,дела все на потом ведь я врубаю свой поток 
+
+
+class UpdateOrderStatusAPIView(APIView):
+
+    queryset = CartOrder.objects.all()
+
+    def post(self, request):
+        user = self.request.user
+        order = Cartitems.objects.filter(order__owner=user).first()
+        if order:
+            order.is_bought = True
+            order.save()
+
+            send_notification_to_telegram(chat_id=5512193079)
+
+            return Response(f"Status updated for order {user}. Notification send to user with id {order.user.id}", status=status.HTTP_200_OK)
+
+        else:
+            return Response(f"Order with id {user} does not exist in the system.", status=status.HTTP_400_BAD_REQUEST)
