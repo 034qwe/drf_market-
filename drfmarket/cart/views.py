@@ -74,18 +74,19 @@ class OneOrderAPIView(generics.CreateAPIView):
 
 class UpdateOrderStatusAPIView(APIView):
 
-    queryset = CartOrder.objects.all()
+    queryset = Cartitems.objects.all()
 
-    def post(self, request):
+    def post(self, request,pk):
+        chat_id =5512193079
         user = self.request.user
-        order = Cartitems.objects.filter(order__owner=user).first()
+        order = Cartitems.objects.filter(id=pk).first()
         if order:
             order.is_bought = True
             order.save()
 
-            send_notification_to_telegram(chat_id=5512193079)
+            send_notification_to_telegram(chat_id=chat_id)
 
-            return Response(f"Status updated for order {user}. Notification send to user with id {order.user.id}", status=status.HTTP_200_OK)
+            return Response(f"Status updated for order {user}. Notification send to user with id {chat_id}", status=status.HTTP_200_OK)
 
         else:
             return Response(f"Order with id {user} does not exist in the system.", status=status.HTTP_400_BAD_REQUEST)
