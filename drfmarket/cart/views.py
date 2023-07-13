@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import  *
 
-from .tests import send_notification_to_telegram
+from .tests import *
 
 
 class CartUserAPIList(generics.ListAPIView):
@@ -77,12 +77,14 @@ class UpdateOrderStatusAPIView(APIView):
     queryset = Cartitems.objects.all()
 
     def post(self, request,pk):
-        chat_id =5512193079
+
         user = self.request.user
         order = Cartitems.objects.filter(id=pk).first()
         if order:
+            chat_id =user.id
             order.is_bought = True
             order.save()
+            trytoken()
 
             send_notification_to_telegram(chat_id=chat_id)
 
