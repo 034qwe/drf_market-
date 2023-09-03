@@ -37,3 +37,6 @@ class Cartitems(models.Model):
     def __str__(self):
         return f"{self.pk}"
 
+
+class HelloWord(models.Model):
+    Hello = models.BooleanField()
