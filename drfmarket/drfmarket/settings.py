@@ -81,10 +81,14 @@ WSGI_APPLICATION = 'drfmarket.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
+DATABASES = { 
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django_test',
+        'USER': 'django_test',
+        'PASSWORD': 'K2sGLcVqNVYYcJD3IWf8f5NL0c7kTqaq',
+        'HOST': '0.0.0.0',
+        'PORT': '5432',
     }
 }
 
