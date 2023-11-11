@@ -1,11 +1,13 @@
-attach:
-	docker-compose up
+dev_build:
+	docker-compose -f docker-compose.yml build
 
-build:
-	docker-compose build
+dev_attach:
+	docker-compose -f docker-compose.yml up
 
-django_makemigrations:
-	docker-compose exec django python manage.py makemigrations
+dev_migrate_db: dev_django_makemigrations dev_django_migrate
 
-django_migrate:
-	docker-compose exec django python manage.py migrate
+dev_django_makemigrations:
+	docker exec -it django_test python manage.py makemigrations
+
+dev_django_migrate:
+	docker exec -it django_test python manage.py migrate
