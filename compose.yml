@@ -1,0 +1,60 @@
+
+services:
+  # nginx:
+  #   image: nginx:1.23.0
+  #   container_name: "nginx_test"
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #     - ./nginx/ssl:/etc/ssl
+  #   depends_on:
+  #     - django
+  #     - postgresql
+
+  django:
+    build:
+      context: ./drfmarket
+      dockerfile: Dockerfile
+    container_name: "django_test"
+    restart: on-failure
+    volumes:
+      - ./drfmarket:/app
+    ports:
+        - "8000:8000"
+    # link:
+    #   - 'postgres:postgresql_test'
+    env_file:
+      - "./environment/django.env"
+    command: "python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - mynet
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+  postgresql:
+    image: postgres:14
+    restart: on-failure
+    container_name: "postgresql_test"
+    env_file:
+      - "./environment/db.env"
+    networks:
+      - mynet
+    volumes:
+      - postgres-data:/var/lib/postgrs/data
+
+     
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U django_test"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+volumes:
+  postgres-data:
+
+networks:
+  mynet:
+    driver: bridge
